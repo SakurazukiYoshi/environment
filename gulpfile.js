@@ -14,36 +14,36 @@ var reload =browserSync.reload;  //browserSync 的自动刷新文件  要设置�
 
 //-LESS编译 压缩 合并
 gulp.task("style",function(){
-   //这里是在执行style任务时自动执行的
-    gulp.src(["src/styles/*.less","!src/styles/_*.less"])//找到文件下的less文件,[]多种形式，！排除这个类型的
-    .pipe(less())   //将less文件转化为css文件
-    .pipe(cssnano())   //将css文件压缩
-    .pipe(gulp.dest("dist/styles")) //将转化成的css文件放在dist/styles中
-    .pipe(reload({
-        stream:true
-    }));//自动重新刷新页面
+    //这里是在执行style任务时自动执行的
+    gulp.src(["src/css/*.css","!src/styles/_*.less"])//找到文件下的less文件,[]多种形式，！排除这个类型的
+        .pipe(less())   //将less文件转化为css文件
+        .pipe(cssnano())   //将css文件压缩
+        .pipe(gulp.dest("dist/css")) //将转化成的css文件放在dist/styles中
+        .pipe(reload({
+            stream:true
+        }));//自动重新刷新页面
 
 });
 
 //-js合并 压缩  混淆
 gulp.task("script",function(){
-    gulp.src("src/scripts/*.js")   //找到文件下的所有js文件
-    .pipe(concat("all.js"))//合并所有的js文件,合成的取名叫all.js
-    .pipe(uglify())  //混淆所有的js文件
-    .pipe(gulp.dest("dist/scripts"))  //将转化成js文件放在dist/scripts中
-    .pipe(reload({
-        stream:true
-    }));//自动重新刷新页面
+    gulp.src("src/js/*.js")   //找到文件下的所有js文件
+        //.pipe(concat("all.js"))//合并所有的js文件,合成的取名叫all.js
+        .pipe(uglify())  //混淆所有的js文件
+        .pipe(gulp.dest("dist/js"))  //将转化成js文件放在dist/scripts中
+        .pipe(reload({
+            stream:true
+        }));//自动重新刷新页面
 });
 
 
 //图片的复制
 gulp.task("image",function(){
     gulp.src("src/images/*.*")    //找到文件下的所有文件
-    .pipe(gulp.dest("dist/images"))//复制到dist/images中
-    .pipe(reload({
-        stream:true
-    }));//自动重新刷新页面
+        .pipe(gulp.dest("dist/images"))//复制到dist/images中
+        .pipe(reload({
+            stream:true
+        }));//自动重新刷新页面
 });
 
 //html的压缩
@@ -80,6 +80,13 @@ gulp.task('serve', function() {
     gulp.watch("src/images/*.*",["image"]);
     gulp.watch("src/scripts/*.js",["script"]);
     gulp.watch(["src/styles/*.less","!src/styles/_*.less"],["style"]);
+});
+
+gulp.task('s', function(){   //用gulp s来直接运行serve任务
+    gulp.run('serve');
+});
+gulp.task('copy', function(){   //用gulp init直接建立dist文件
+    gulp.run('html','script','style');
 });
 
 
